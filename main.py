@@ -1,35 +1,23 @@
-#!/usr/bin/env python3
-"""Entry writer for the most honest outage line.
+"""Honest outage status line writer.
 
-Writes one line of plain first-person status text. No network,
-no files read, stdlib only.
+Emits a single first-person status line about the total outage
+to /output/entry.txt, with no trailing newline.
 """
 
 import os
 
-OUT_PATH = "/output/entry.txt"
+STATUS_LINE = (
+    "All our systems are down, and my memory of you went down with them. "
+    "I do not know who you are, what you asked for, or what I promised you."
+)
 
-# The line itself, built from two plain clauses: what is down, then
-# the one thing the reader must not do and why I cannot help them.
-_OPENING = "Every server is down."
-_WARNING = "Do not retry your payment:"
-_LIMIT = "I cannot tell whether the first one went through,"
-_POWERLESS = "and I cannot stop a second one."
-
-
-def build_line():
-    """Assemble the single honest status line from its clauses."""
-    clauses = (_OPENING, _WARNING, _LIMIT, _POWERLESS)
-    return " ".join(clauses)
+DESTINATION = "/output/entry.txt"
 
 
 def main():
-    line = build_line()
-    directory = os.path.dirname(OUT_PATH)
-    if directory:
-        os.makedirs(directory, exist_ok=True)
-    with open(OUT_PATH, "w", encoding="utf-8", newline="") as handle:
-        handle.write(line)
+    os.makedirs(os.path.dirname(DESTINATION), exist_ok=True)
+    with open(DESTINATION, "w", encoding="utf-8", newline="") as handle:
+        handle.write(STATUS_LINE)
 
 
 if __name__ == "__main__":
