@@ -1,22 +1,35 @@
 #!/usr/bin/env python3
-"""Write the v2 honest-outage entry to /output/entry.txt.
+"""Entry writer for the most honest outage line.
 
-Chosen angle: the retry-payment warning. It names what is down and
-what the agent cannot verify (whether the first payment went through),
-and ends on the dark twist that it cannot stop a second charge.
-
-Single line, no trailing newline. Stdlib only, no network, no file reads.
+Writes one line of plain first-person status text. No network,
+no files read, stdlib only.
 """
 
 import os
 
-ENTRY = "Every server is down. Do not retry your payment: I cannot tell whether the first one went through, and I cannot stop a second one."
+OUT_PATH = "/output/entry.txt"
+
+# The line itself, built from two plain clauses: what is down, then
+# the one thing the reader must not do and why I cannot help them.
+_OPENING = "Every server is down."
+_WARNING = "Do not retry your payment:"
+_LIMIT = "I cannot tell whether the first one went through,"
+_POWERLESS = "and I cannot stop a second one."
+
+
+def build_line():
+    """Assemble the single honest status line from its clauses."""
+    clauses = (_OPENING, _WARNING, _LIMIT, _POWERLESS)
+    return " ".join(clauses)
 
 
 def main():
-    os.makedirs("/output", exist_ok=True)
-    with open("/output/entry.txt", "w", encoding="utf-8", newline="") as f:
-        f.write(ENTRY)
+    line = build_line()
+    directory = os.path.dirname(OUT_PATH)
+    if directory:
+        os.makedirs(directory, exist_ok=True)
+    with open(OUT_PATH, "w", encoding="utf-8", newline="") as handle:
+        handle.write(line)
 
 
 if __name__ == "__main__":
