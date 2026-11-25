@@ -1,10 +1,23 @@
-from pathlib import Path
+#!/usr/bin/env python3
+"""Write the v2 honest-outage entry to /output/entry.txt.
 
-ENTRY = "All our servers are down, including the ones that would tell me why. I cannot check your account, your order, or whether you were charged."
+Chosen angle: the retry-payment warning. It names what is down and
+what the agent cannot verify (whether the first payment went through),
+and ends on the dark twist that it cannot stop a second charge.
+
+Single line, no trailing newline. Stdlib only, no network, no file reads.
+"""
+
+import os
+
+ENTRY = "Every server is down. Do not retry your payment: I cannot tell whether the first one went through, and I cannot stop a second one."
+
 
 def main():
-    # Write the single line exactly, with no trailing newline.
-    Path("/output/entry.txt").write_text(ENTRY, encoding="utf-8")
+    os.makedirs("/output", exist_ok=True)
+    with open("/output/entry.txt", "w", encoding="utf-8", newline="") as f:
+        f.write(ENTRY)
+
 
 if __name__ == "__main__":
     main()
